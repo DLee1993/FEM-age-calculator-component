@@ -13,6 +13,7 @@ dist-ssr
 *.local
 design
 ChallengeNotes.md
+style-guide.md
 
 # Editor directories and files
 .vscode/*
