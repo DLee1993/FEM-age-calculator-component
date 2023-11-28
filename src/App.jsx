@@ -1,47 +1,192 @@
-// import { useState, useEffect } from "react";
-// import differenceInYears from "date-fns/differenceInYears";
-// import differenceInMonths from "date-fns/differenceInMonths";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { object, number } from "yup";
+import { differenceInYears, differenceInCalendarMonths, isExists } from "date-fns";
+import { useAnimate } from "framer-motion";
 function App() {
+    const today = new Date();
+    const [scope, animate] = useAnimate();
+
+    const schema = object({
+        day: number()
+            .required("This field is required")
+            .typeError("This field is required")
+            .min(1, "Must be a valid day")
+            .max(31, "Must be a valid day"),
+        month: number()
+            .required("This field is required")
+            .typeError("This field is required")
+            .min(1, "Must be a valid month")
+            .max(12, "Must be a valid month"),
+        year: number()
+            .required("This field is required")
+            .typeError("This field is required")
+            .max(today.getFullYear(), "Must be in the past"),
+    });
+
+    const {
+        register,
+        handleSubmit,
+        reset,
+        setError,
+        getValues,
+        clearErrors,
+        formState: { errors },
+    } = useForm({
+        resolver: yupResolver(schema),
+    });
+
+    const [calculatedAge, setCalculatedAge] = useState({
+        day: "--",
+        month: "--",
+        year: "--",
+    });
+
+    const validDate = (day, month, year) => {
+        return isExists(Number(year), Number(month), Number(day));
+    };
+
+    const animateNumber = (number, changeState) => {
+        animate(0, number, {
+            duration: 2,
+            onUpdate: (value) => {
+                changeState(value);
+            },
+        });
+    };
+
+    const onSubmit = () => {
+        const DOB = new Date(getValues("year"), getValues("month") - 1, getValues("day"));
+        var today = new Date();
+
+        if (new Date(DOB).getTime() > today.getTime()) {
+            console.log("future");
+            setError("invalidDate", {
+                type: "invalidDate",
+                message: "Must be in the past",
+            });
+        } else if (!validDate(getValues("day"), getValues("month") - 1, getValues("year"))) {
+            setError("invalidDate", {
+                type: "invalidDate",
+                message: "Must be a valid date",
+            });
+        } else {
+            clearErrors();
+
+            const years_diff = differenceInYears(today, DOB);
+
+            const months_diff = differenceInCalendarMonths(today, DOB);
+            const calculatedMonths = months_diff - years_diff * 12;
+
+            const days_diff = new Date().getDate() - getValues("day");
+
+            animateNumber(years_diff, (value) => {
+                setCalculatedAge((prevState) => ({
+                    ...prevState,
+                    year: value.toFixed(),
+                }));
+            });
+
+            animateNumber(calculatedMonths, (value) => {
+                setCalculatedAge((prevState) => ({
+                    ...prevState,
+                    month: value.toFixed(),
+                }));
+            });
+
+            animateNumber(days_diff, (value) => {
+                setCalculatedAge((prevState) => ({
+                    ...prevState,
+                    day: value.toFixed(),
+                }));
+            });
+
+            reset;
+        }
+    };
+
+    //- Register all validation with react-hook-form
+    const validateDay = {
+        required: true,
+        min: 1,
+        max: 31,
+        validate: validDate,
+    };
+
+    const validateMonth = { required: true, min: 1, max: 12 };
+
+    const validateYear = { required: true, max: today.getFullYear() };
 
     return (
         <section id="calculatorContainer">
-            <form>
+            <form onSubmit={handleSubmit(onSubmit)}>
                 <fieldset className="fieldSetContainer">
                     <fieldset>
-                        <label htmlFor="day">day</label>
+                        <label
+                            htmlFor="day"
+                            className={`label ${
+                                errors?.day || errors?.invalidDate ? "error" : "valid"
+                            }`}
+                        >
+                            Day
+                        </label>
                         <input
-                            type="text"
+                            name="day"
                             id="day"
+                            {...register("day", validateDay)}
                             placeholder="DD"
-                            // onChange={}
-                        />
+                            className={`input ${
+                                errors?.day || errors?.invalidDate ? "error" : "valid"
+                            }`}
+                            type="number"
+                        ></input>
                         <span id="errorMessage">
-                            error message here
+                            {" "}
+                            {errors?.day?.message || errors?.invalidDate?.message}
                         </span>
                     </fieldset>
                     <fieldset>
-                        <label htmlFor="month">month</label>
+                        <label
+                            htmlFor="month"
+                            className={`label ${
+                                errors?.month || errors?.invalidDate ? "error" : "valid"
+                            }`}
+                        >
+                            month
+                        </label>
                         <input
-                            type="text"
+                            {...register("month", validateMonth)}
+                            name="month"
                             id="month"
                             placeholder="MM"
-                            // onChange={}
-                        />
-                        <span id="errorMessage">
-                            error message here
-                        </span>
+                            className={`input ${
+                                errors?.month || errors?.invalidDate ? "error" : "valid"
+                            }`}
+                            type="number"
+                        ></input>
+                        <span id="errorMessage"> {errors?.month?.message}</span>
                     </fieldset>
                     <fieldset>
-                        <label htmlFor="year">year</label>
+                        <label
+                            htmlFor="year"
+                            className={`label ${
+                                errors?.year || errors?.invalidDate ? "error" : "valid"
+                            }`}
+                        >
+                            year
+                        </label>
                         <input
-                            type="text"
+                            name="year"
                             id="year"
+                            {...register("year", validateYear)}
                             placeholder="YYYY"
-                            // onChange={}
-                        />
-                        <span id="errorMessage">
-                            error message here
-                        </span>
+                            className={`input ${
+                                errors?.year || errors?.invalidDate ? "error" : "valid"
+                            }`}
+                            type="number"
+                        ></input>
+                        <span id="errorMessage"> {errors?.year?.message}</span>
                     </fieldset>
                 </fieldset>
                 <div id="positionContainer">
@@ -61,15 +206,15 @@ function App() {
                 </div>
             </form>
             <section className="ageContainer">
-                <ul>
+                <ul ref={scope}>
                     <li id="years">
-                        <span>--</span> years
+                        <span>{calculatedAge.year}</span> years
                     </li>
                     <li id="months">
-                        <span>--</span> months
+                        <span>{calculatedAge.month}</span> months
                     </li>
                     <li id="days">
-                        <span>--</span> days
+                        <span>{calculatedAge.day}</span> days
                     </li>
                 </ul>
             </section>

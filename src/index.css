@@ -44,7 +44,7 @@ form {
     padding: 0px 10px;
 }
 
-.fieldSetContainer{
+.fieldSetContainer {
     display: flex;
     border: none;
 }
@@ -77,7 +77,7 @@ input::placeholder {
     color: var(--SmokeyGrey);
 }
 
-#positionContainer{
+#positionContainer {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -86,7 +86,7 @@ input::placeholder {
     margin-top: 30px;
 }
 
-#line{
+#line {
     position: absolute;
     top: 50%;
     left: 50%;
@@ -97,21 +97,21 @@ input::placeholder {
     z-index: 0;
 }
 
-#submitButton{
+#submitButton {
     position: relative;
     z-index: 1;
     border-radius: 50%;
     background-color: var(--Purple);
-    border: none; 
+    border: none;
     padding: 10px;
     cursor: pointer;
     opacity: 1;
 }
 
-#submitButton:hover{
+#submitButton:hover {
     background-color: var(--OffBlack);
 }
-ul{
+ul {
     list-style: none;
     padding-left: 15px;
 }
@@ -120,7 +120,7 @@ li {
     font-weight: 800;
     font-size: 4rem;
 }
-li span{
+li span {
     color: var(--Purple);
     font-weight: 800;
 }
@@ -133,14 +133,10 @@ li span{
     height: 10px;
 }
 
-.day.error label,
-.month.error label,
-.year.error label {
+.label.error {
     color: var(--LightRed);
 }
-.day.error input,
-.month.error input,
-.year.error input {
+.input.error {
     border: 1px solid var(--LightRed);
     outline: 1px solid var(--LightRed);
 }
@@ -151,11 +147,11 @@ li span{
         padding: 20px;
     }
 
-    .fieldSetContainer{
+    .fieldSetContainer {
         max-width: 75%;
     }
 
-    #positionContainer{
+    #positionContainer {
         justify-content: end;
     }
 }
