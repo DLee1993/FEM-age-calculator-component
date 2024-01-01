@@ -122,7 +122,7 @@ function App() {
 
     return (
         <main id="calculatorContainer">
-            <h1 className="hidden">Age calculator container</h1>
+            <h1 className="sr-only">Age calculator container</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <fieldset className="fieldSetContainer">
                     <fieldset>
@@ -195,7 +195,7 @@ function App() {
                 <div id="positionContainer">
                     <div id="line"></div>
                     <button id="submitButton">
-                        <span className="hidden">submit</span>
+                        <span className="sr-only">submit</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="46"
@@ -210,7 +210,7 @@ function App() {
                 </div>
             </form>
             <section className="ageContainer">
-                <h2 className="hidden">Final age container</h2>
+                <h2 className="sr-only">Final age container</h2>
                 <ul ref={scope}>
                     <li id="years">
                         <span>{calculatedAge.year}</span> years
