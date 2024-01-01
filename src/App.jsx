@@ -79,7 +79,9 @@ function App() {
             const months_diff = differenceInCalendarMonths(today, DOB);
             const calculatedMonths = months_diff - years_diff * 12;
 
-            const days_diff = new Date().getDate() - getValues("day");
+            const days_diff = getValues("day") - new Date().getDate();
+
+            console.log(days_diff)
 
             animateNumber(years_diff, (value) => {
                 setCalculatedAge((prevState) => ({
@@ -120,7 +122,7 @@ function App() {
 
     return (
         <main id="calculatorContainer">
-            <h1 className="sr-only">Age calculator container</h1>
+            <h1 className="hidden">Age calculator container</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <fieldset className="fieldSetContainer">
                     <fieldset>
@@ -193,7 +195,7 @@ function App() {
                 <div id="positionContainer">
                     <div id="line"></div>
                     <button id="submitButton">
-                        <span className="sr-only">submit</span>
+                        <span className="hidden">submit</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="46"
@@ -208,7 +210,7 @@ function App() {
                 </div>
             </form>
             <section className="ageContainer">
-                <h2 className="sr-only">Final age container</h2>
+                <h2 className="hidden">Final age container</h2>
                 <ul ref={scope}>
                     <li id="years">
                         <span>{calculatedAge.year}</span> years
