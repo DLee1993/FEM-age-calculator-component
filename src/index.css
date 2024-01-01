@@ -125,7 +125,7 @@ li span {
     font-weight: 800;
 }
 
-#errorMessage {
+#errorMessage-day, #errorMessage-month, #errorMEssage-year {
     color: var(--LightRed);
     font-size: 12px;
     font-style: italic;

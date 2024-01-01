@@ -119,7 +119,8 @@ function App() {
     const validateYear = { required: true, max: today.getFullYear() };
 
     return (
-        <section id="calculatorContainer">
+        <main id="calculatorContainer">
+            <h1 className="sr-only">Age calculator container</h1>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <fieldset className="fieldSetContainer">
                     <fieldset>
@@ -141,7 +142,7 @@ function App() {
                             }`}
                             type="number"
                         ></input>
-                        <span id="errorMessage">
+                        <span id="errorMessage-day">
                             {" "}
                             {errors?.day?.message || errors?.invalidDate?.message}
                         </span>
@@ -165,7 +166,7 @@ function App() {
                             }`}
                             type="number"
                         ></input>
-                        <span id="errorMessage"> {errors?.month?.message}</span>
+                        <span id="errorMessage-month"> {errors?.month?.message}</span>
                     </fieldset>
                     <fieldset>
                         <label
@@ -186,12 +187,13 @@ function App() {
                             }`}
                             type="number"
                         ></input>
-                        <span id="errorMessage"> {errors?.year?.message}</span>
+                        <span id="errorMessage-year"> {errors?.year?.message}</span>
                     </fieldset>
                 </fieldset>
                 <div id="positionContainer">
                     <div id="line"></div>
                     <button id="submitButton">
+                        <span className="sr-only">submit</span>
                         <svg
                             xmlns="http://www.w3.org/2000/svg"
                             width="46"
@@ -206,6 +208,7 @@ function App() {
                 </div>
             </form>
             <section className="ageContainer">
+                <h2 className="sr-only">Final age container</h2>
                 <ul ref={scope}>
                     <li id="years">
                         <span>{calculatedAge.year}</span> years
@@ -218,7 +221,7 @@ function App() {
                     </li>
                 </ul>
             </section>
-        </section>
+        </main>
     );
 }
 
